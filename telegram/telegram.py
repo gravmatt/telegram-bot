@@ -54,7 +54,7 @@ class Bot:
         return http.request(self.baseurl + self.token + '/setWebhook', method='POST', body=json.dumps({'url': hook}), headers={'Content-Type': 'application/json'})
 
 
-    def sendMessage(self, chat_id, text, parse_mode=True, disable_web_page_preview=True, disable_notification=False, reply_to_message_id=None, reply_markup=None):
+    def sendMessage(self, chat_id, text, parse_mode='Markdown', disable_web_page_preview=True, disable_notification=False, reply_to_message_id=None, reply_markup=None):
         data = {'chat_id': chat_id, 'text': text, 'parse_mode': parse_mode, 'disable_web_page_preview': disable_web_page_preview, 'disable_notification': disable_notification}
         if(reply_to_message_id): data['reply_to_message_id'] = reply_to_message_id
         if(reply_markup): data['reply_markup'] = reply_markup
