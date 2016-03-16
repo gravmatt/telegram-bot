@@ -54,6 +54,10 @@ class Bot:
         return http.request(self.baseurl + self.token + '/setWebhook', method='POST', body=json.dumps({'url': hook}), headers={'Content-Type': 'application/json'})
 
 
+    def getMe(self):
+        return http.request(self.baseurl + self.token + '/getMe', method='GET', headers={'Content-Type': 'application/json'})
+
+
     def sendMessage(self, chat_id, text, parse_mode='Markdown', disable_web_page_preview=True, disable_notification=False, reply_to_message_id=None, reply_markup=None):
         data = {'chat_id': chat_id, 'text': text, 'parse_mode': parse_mode, 'disable_web_page_preview': disable_web_page_preview, 'disable_notification': disable_notification}
         if(reply_to_message_id): data['reply_to_message_id'] = reply_to_message_id
@@ -61,45 +65,52 @@ class Bot:
         return http.request(self.baseurl + self.token + '/sendMessage', method='POST', body=json.dumps(data), headers={'Content-Type': 'application/json'})
 
 
+    def forwardMessage(self, chat_id, from_chat_id, message_id, disable_notification=None):
+        data = {'data_id': data_id, 'from_chat_id': from_chat_id, 'message_id': message_id}
+        if(disable_notification): data['disable_notification'] = disable_notification
+        return http.request(self.baseurl + self.token + '/forwardMessage', method='POST', body=json.dumps(data), headers={'Content-Type': 'application/json')
+
+
     def sendFile(self, method, chat_id, filepath, **optional):
         data = {'chat_id': chat_id}
         for key in optional:
-            data[key] = optional[key]
+            if(optional[key]): data[key] = optional[key]
         with open(filepath, 'rb') as file:
             binary = file.read()
         filename = os.path.basename(filepath)
         return http.multipartFormData(self.baseurl + self.token + method, data, files=[(method.replace('/send', '').lower(), filename, photo)])
 
 
-    def sendPhoto(self, chat_id, photopath, caption=None, reply_to_message_id=None, reply_markup=None):
-        return sendFile('/sendPhoto', chat_id, photopath, caption, reply_to_message_id, reply_markup)
+    def sendPhoto(self, chat_id, photopath, caption=None, disable_notification=None, reply_to_message_id=None, reply_markup=None):
+        return sendFile('/sendPhoto', chat_id, photopath, caption=caption, disable_notification=disable_notification, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup)
 
 
-    def sendAudio(self, chat_id, audiopath, duration=None, performer=None, title=None, reply_to_message_id=None, reply_markup=None):
-        return sendFile('/sendAudio', chat_id, audiopath, duration, performer, title, reply_to_message_id, reply_markup)
+    def sendAudio(self, chat_id, audiopath, duration=None, performer=None, title=None, disable_notification=None, reply_to_message_id=None, reply_markup=None):
+        return sendFile('/sendAudio', chat_id, audiopath, duration=duration, performer=performer, title=title, disable_notification=disable_notification, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup)
 
 
-    def sendDocument(self, chat_id, documentpath, reply_to_message_id=None, reply_markup=None):
-        return sendFile('/sendDocument', chat_id, documentpath, reply_to_message_id, reply_markup)
+    def sendDocument(self, chat_id, documentpath, caption=None, disable_notification=None, reply_to_message_id=None, reply_markup=None):
+        return sendFile('/sendDocument', chat_id, documentpath, caption=caption, disable_notification=disable_notification, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup)
 
 
-    def sendSticker(self, chat_id, stickerpath, reply_to_message_id=None, reply_markup=None):
-        return sendFile('/sendSticker', chat_id, stickerpath, reply_to_message_id, reply_markup)
+    def sendSticker(self, chat_id, stickerpath, disable_notification=None, reply_to_message_id=None, reply_markup=None):
+        return sendFile('/sendSticker', chat_id, stickerpath, disable_notification=disable_notification reply_to_message_id=reply_to_message_id, reply_markup=reply_markup)
 
 
-    def sendVideo(self, chat_id, videopath, duration=None, caption=None, reply_to_message_id=None, reply_markup=None):
-        return sendFile('/sendVideo', chat_id, videopath, duration, caption, reply_to_message_id, reply_markup)
+    def sendVideo(self, chat_id, videopath, duration=None, caption=None, disable_notification=None, reply_to_message_id=None, reply_markup=None):
+        return sendFile('/sendVideo', chat_id, videopath, duration=duration, caption=caption, disable_notification=disable_notification, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup)
 
 
-    def sendVoice(self, chat_id, voicepath, duration=None, reply_to_message_id=None, reply_markup=None):
-        return sendFile('/sendVoice', chat_id, voicepath, duration, reply_to_message_id, reply_markup)
+    def sendVoice(self, chat_id, voicepath, duration=None, disable_notification=None, reply_to_message_id=None, reply_markup=None):
+        return sendFile('/sendVoice', chat_id, voicepath, duration=duration, disable_notification=disable_notification, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup)
 
 
-    def sendLocation(self, chat_id, latitude, longitude, reply_to_message_id=None, reply_markup=None):
+    def sendLocation(self, chat_id, latitude, longitude, disable_notification=None, reply_to_message_id=None, reply_markup=None):
         data = {}
         data['chat_id'] = chat_id
         data['latitude'] = latitude
         data['longitude'] = longitude
+        if(disable_notification): data['disable_notification'] = disable_notification
         if(reply_to_message_id): data['reply_to_message_id'] = reply_to_message_id
         if(reply_markup): data['reply_markup'] = reply_markup
         return http.request(self.baseurl + self.token + '/sendLocation', method='POST', body=json.dumps(data), headers={'Content-Type': 'application/json'})

@@ -11,13 +11,13 @@ if sys.version_info < (2, 6):
 
 import telegram
 
-# with open('README.rst', 'r') as f:
-#     longDesc = f.read()
+with open('README.rst', 'r') as f:
+    longDesc = f.read()
 
 setup(name='telegram-bot',
       version=telegram.__version__,
       description='telegram-bot help creating telegram bots in python.',
-      long_description='telegram-bot help creating telegram bots in python.',
+      long_description=longDesc,
       author='Rene Tanczos',
       author_email='gravmatt@gmail.com',
       url='https://github.com/gravmatt/telegram-bot',
