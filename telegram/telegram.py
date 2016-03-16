@@ -68,7 +68,7 @@ class Bot:
     def forwardMessage(self, chat_id, from_chat_id, message_id, disable_notification=None):
         data = {'data_id': data_id, 'from_chat_id': from_chat_id, 'message_id': message_id}
         if(disable_notification): data['disable_notification'] = disable_notification
-        return http.request(self.baseurl + self.token + '/forwardMessage', method='POST', body=json.dumps(data), headers={'Content-Type': 'application/json')
+        return http.request(self.baseurl + self.token + '/forwardMessage', method='POST', body=json.dumps(data), headers={'Content-Type': 'application/json'})
 
 
     def sendFile(self, method, chat_id, filepath, **optional):
@@ -94,7 +94,7 @@ class Bot:
 
 
     def sendSticker(self, chat_id, stickerpath, disable_notification=None, reply_to_message_id=None, reply_markup=None):
-        return sendFile('/sendSticker', chat_id, stickerpath, disable_notification=disable_notification reply_to_message_id=reply_to_message_id, reply_markup=reply_markup)
+        return sendFile('/sendSticker', chat_id, stickerpath, disable_notification=disable_notification, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup)
 
 
     def sendVideo(self, chat_id, videopath, duration=None, caption=None, disable_notification=None, reply_to_message_id=None, reply_markup=None):
